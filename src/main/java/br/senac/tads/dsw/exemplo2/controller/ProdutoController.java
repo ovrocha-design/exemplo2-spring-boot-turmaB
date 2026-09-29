@@ -1,8 +1,12 @@
 package br.senac.tads.dsw.exemplo2.controller;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,5 +35,20 @@ URI location = ServletUriComponentsBuilder
 .toUri();
 return ResponseEntity.created(location).body(produtoSalvo);
 }
+@GetMapping 
+public List<Produto> listarTodos() {
+return repository.findAll();
+}
+
+@GetMapping("/{id}")
+public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
+Optional<Produto> produtoBuscado = repository.findById(id);
+if (produtoBuscado.isPresent()) {
+return ResponseEntity.ok(produtoBuscado.get());
+} else {
+return ResponseEntity.notFound().build();
+}
+}
+
 }
 
